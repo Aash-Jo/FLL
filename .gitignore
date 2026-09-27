@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.venv/
+
+# rebuilt by setup.ps1 on each PC - never copy
+.venv/
+__pycache__/
+
+# Guard emergency off switch is local state
+scripts/guard_paths.off
+
+# exists only while `spike session` is open (port + pid for the VS Code buttons)
+.spike-session
+
+# `spike bundle` output: programs with robot.py copied in, for pasting into the SPIKE app
+build/

@@ -1,0 +1,90 @@
+{
+    // The project's own interpreter. setup.ps1 / setup.sh create it; never copy
+    // .venv between machines. This path is the Windows layout; on macOS/Linux
+    // the Python extension auto-discovers .venv/bin/python in the workspace
+    // (if it does not, pick it via "Python: Select Interpreter").
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+    "python.terminal.activateEnvironment": true,
+
+    // ---- Autocomplete / type checking for the SPIKE App 3 (Hub OS 1.8.x) Python API ----
+    "python.languageServer": "Pylance",
+    "python.analysis.stubPath": "typings",
+    "python.analysis.extraPaths": ["typings"],
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.diagnosticSeverityOverrides": {
+        // The hub modules exist only as stubs here - they live on the hub itself.
+        "reportMissingModuleSource": "none"
+    },
+    "python.analysis.include": ["programs", "typings", "tools"],
+
+    // ---- Ruff ----
+    // Ruff's *formatter* (format on save) never touches import order or the
+    // blank lines around the import block; only its linter fix does. Run that
+    // fix on every explicit save so rule I001 ("import block is un-sorted or
+    // un-formatted") cannot linger as a squiggle.
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports.ruff": "explicit"
+        }
+    },
+
+    // ---- Pylint ----
+    // Pylint resolves imports against desktop Python and ignores .pyi stubs,
+    // so it flags every hub module. Pylance still type-checks them via typings/.
+    // typings/ itself is stub files - unused args and shadowed builtins are
+    // inherent to .pyi and not worth reporting.
+    "pylint.args": [
+        "--disable=import-error",
+        "--ignore-paths=.*typings.*"
+    ],
+
+    // ---- Status-bar buttons (Task Buttons extension) ----
+    // Bottom-left of the window: Connect, Run, Stop, Disconnect, and a Robots
+    // menu. Each button only runs a task from tasks.json. Without the
+    // extension the buttons are absent and everything else still works.
+    // Repeated in FLL.code-workspace: when the project is opened through that
+    // file, VS Code ignores window-level settings here. Keep both blocks identical.
+    "VsCodeTaskButtons.showCounter": false,
+    "VsCodeTaskButtons.tasks": [
+        {
+            "label": "$(plug) Connect",
+            "task": "Hub (BLE): session (stay connected)",
+            "tooltip": "Connect to the robot and stay connected (its Bluetooth light must be blinking)"
+        },
+        {
+            "label": "$(play) Run",
+            "task": "Robot: run current file",
+            "tooltip": "Save and run the program that is open in the editor"
+        },
+        {
+            "label": "$(debug-stop) Stop",
+            "task": "Robot: stop",
+            "tooltip": "Stop the program running on the robot"
+        },
+        {
+            "label": "$(debug-disconnect) Disconnect",
+            "task": "Robot: disconnect",
+            "tooltip": "Disconnect from the robot"
+        },
+        {
+            "label": "$(list-selection) Robots",
+            "tooltip": "More: pick a robot, find robots, store a program in a slot",
+            "tasks": [
+                { "label": "Connect to a chosen robot", "task": "Hub (BLE): session on...", "description": "When both robots are switched on" },
+                { "label": "Find robots", "task": "Hub (BLE): discover hubs", "description": "Every hub in range, with the values hubs.json needs" },
+                { "label": "Store current file in a slot", "task": "Hub (BLE): upload current file to a slot", "description": "For the SPIKE app, without running it" }
+            ]
+        }
+    ],
+
+    "files.exclude": {
+        "**/__pycache__": true
+    },
+    "files.watcherExclude": {
+        "**/.venv/**": true
+    },
+    "search.exclude": {
+        "**/.venv": true
+    }
+}

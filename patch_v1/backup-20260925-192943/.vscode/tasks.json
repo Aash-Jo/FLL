@@ -1,0 +1,213 @@
+{
+    // Two ways to reach a robot, both through tools/spike_ble.py and hubs.json:
+    //
+    //  Bluetooth (default) - LEGO's published BLE protocol, the same one the
+    //      SPIKE app uses. The program is uploaded into a hub slot and started
+    //      there; print() streams back. No cable. The hub must be on and NOT
+    //      connected to the SPIKE app (Bluetooth light blinking).
+    //
+    //  USB - mpremote over the MicroPython REPL on the serial port. Needs the
+    //      cable, but it is the only route with an interactive REPL.
+    //
+    // Every task runs this folder's .venv interpreter: Scripts\python.exe on
+    // Windows, bin/python on macOS/Linux (the "osx"/"linux" overrides).
+    // Tasks without "on..." take whichever robot is available; the "on..."
+    // variants ask which robot (names from hubs.json).
+    "version": "2.0.0",
+    "inputs": [
+        {
+            "id": "hub",
+            "type": "pickString",
+            "description": "Which robot? (names from hubs.json)",
+            "default": "robot1",
+            "options": ["robot1", "robot2"]
+        },
+        {
+            "id": "slot",
+            "type": "pickString",
+            "description": "Hub slot to store the program in",
+            "default": "0",
+            "options": ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19"]
+        }
+    ],
+    "tasks": [
+        // ---- Bluetooth -------------------------------------------------
+        {
+            "label": "Hub (BLE): run current file",
+            "detail": "Upload the open program to slot 0 over Bluetooth, start it, stream print() here. Whichever robot is advertising.",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "osx":   { "command": "${workspaceFolder}/.venv/bin/python" },
+            "linux": { "command": "${workspaceFolder}/.venv/bin/python" },
+            "args": ["tools/spike_ble.py", "-v", "run", "${file}"],
+            "problemMatcher": [],
+            "group": { "kind": "build", "isDefault": true },
+            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+        },
+        {
+            "label": "Hub (BLE): run current file on...",
+            "detail": "Same, but you choose the robot.",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "osx":   { "command": "${workspaceFolder}/.venv/bin/python" },
+            "linux": { "command": "${workspaceFolder}/.venv/bin/python" },
+            "args": ["tools/spike_ble.py", "-v", "run", "${file}", "--hub", "${input:hub}"],
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+        },
+        {
+            "label": "Hub (BLE): session (stay connected)",
+            "detail": "Connect once and stay connected. At the spike> prompt: run FILE, r (re-run), stop, quit.",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "osx":   { "command": "${workspaceFolder}/.venv/bin/python" },
+            "linux": { "command": "${workspaceFolder}/.venv/bin/python" },
+            "args": ["tools/spike_ble.py", "session"],
+            "options": { "cwd": "${workspaceFolder}" },
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "dedicated", "focus": true, "clear": true }
+        },
+        {
+            "label": "Hub (BLE): session on...",
+            "detail": "Stay connected to the robot you choose.",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "osx":   { "command": "${workspaceFolder}/.venv/bin/python" },
+            "linux": { "command": "${workspaceFolder}/.venv/bin/python" },
+            "args": ["tools/spike_ble.py", "session", "--hub", "${input:hub}"],
+            "options": { "cwd": "${workspaceFolder}" },
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "dedicated", "focus": true, "clear": true }
+        },
+        {
+            "label": "Hub (BLE): stop running program",
+            "detail": "Connect over Bluetooth and stop whatever is running.",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "osx":   { "command": "${workspaceFolder}/.venv/bin/python" },
+            "linux": { "command": "${workspaceFolder}/.venv/bin/python" },
+            "args": ["tools/spike_ble.py", "stop"],
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "dedicated" }
+        },
+        {
+            "label": "Hub (BLE): upload current file to a slot",
+            "detail": "Store the open program in a slot without starting it - e.g. to hand it to the SPIKE app.",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "osx":   { "command": "${workspaceFolder}/.venv/bin/python" },
+            "linux": { "command": "${workspaceFolder}/.venv/bin/python" },
+            "args": ["tools/spike_ble.py", "-v", "upload", "${file}", "--slot", "${input:slot}"],
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+        },
+        {
+            "label": "Hub (BLE): discover hubs",
+            "detail": "Every hub in range on Bluetooth and USB, with the values hubs.json needs. Use this to register robot2.",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "osx":   { "command": "${workspaceFolder}/.venv/bin/python" },
+            "linux": { "command": "${workspaceFolder}/.venv/bin/python" },
+            "args": ["tools/spike_ble.py", "discover"],
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+        },
+        {
+            "label": "Hub (BLE): info",
+            "detail": "Firmware and protocol details as the hub reports them over Bluetooth.",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "osx":   { "command": "${workspaceFolder}/.venv/bin/python" },
+            "linux": { "command": "${workspaceFolder}/.venv/bin/python" },
+            "args": ["tools/spike_ble.py", "info"],
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+        },
+
+        // ---- USB -------------------------------------------------------
+        {
+            "label": "Hub (USB): run current file",
+            "detail": "Execute the open program over the USB REPL without storing it; print() lands here.",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "osx":   { "command": "${workspaceFolder}/.venv/bin/python" },
+            "linux": { "command": "${workspaceFolder}/.venv/bin/python" },
+            "args": ["tools/spike_ble.py", "usb", "run", "${file}"],
+            "problemMatcher": [],
+            "group": "build",
+            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+        },
+        {
+            "label": "Hub (USB): stop running program",
+            "detail": "Soft-reset the hub over USB.",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "osx":   { "command": "${workspaceFolder}/.venv/bin/python" },
+            "linux": { "command": "${workspaceFolder}/.venv/bin/python" },
+            "args": ["tools/spike_ble.py", "usb", "stop"],
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "dedicated" }
+        },
+        {
+            "label": "Hub (USB): REPL",
+            "detail": "Interactive MicroPython prompt on the hub. Ctrl-] to exit. USB only.",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "osx":   { "command": "${workspaceFolder}/.venv/bin/python" },
+            "linux": { "command": "${workspaceFolder}/.venv/bin/python" },
+            "args": ["tools/spike_ble.py", "usb", "repl"],
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "dedicated", "focus": true, "clear": true }
+        },
+        {
+            "label": "Hub (USB): REPL on...",
+            "detail": "REPL on the robot you choose (when more than one is plugged in).",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "osx":   { "command": "${workspaceFolder}/.venv/bin/python" },
+            "linux": { "command": "${workspaceFolder}/.venv/bin/python" },
+            "args": ["tools/spike_ble.py", "usb", "repl", "--hub", "${input:hub}"],
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "dedicated", "focus": true, "clear": true }
+        },
+        {
+            "label": "Hub (USB): list devices",
+            "detail": "Serial devices mpremote can see, with USB ids.",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "osx":   { "command": "${workspaceFolder}/.venv/bin/python" },
+            "linux": { "command": "${workspaceFolder}/.venv/bin/python" },
+            "args": ["tools/spike_ble.py", "usb", "devs"],
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+        },
+
+        // ---- Environment -----------------------------------------------
+        {
+            // Runs by itself when the folder opens (VS Code asks once to allow
+            // automatic tasks). Silent when set up; otherwise reveals one line
+            // saying which setup script to run.
+            "label": "Check environment (runs on open)",
+            "detail": "Is this machine set up? Silent if yes; tells you to run setup.ps1 / setup.sh if not.",
+            "type": "shell",
+            "command": "powershell",
+            "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}/tools/check_env.ps1"],
+            "osx":   { "command": "bash", "args": ["${workspaceFolder}/tools/check_env.sh"] },
+            "linux": { "command": "bash", "args": ["${workspaceFolder}/tools/check_env.sh"] },
+            "runOptions": { "runOn": "folderOpen" },
+            "problemMatcher": [],
+            "presentation": { "reveal": "silent", "panel": "shared", "showReuseMessage": false }
+        },
+        {
+            "label": "Setup: rebuild environment",
+            "detail": "Recreate .venv, reinstall packages, regenerate the `spike` command. Run after copying this folder to a new machine.",
+            "type": "shell",
+            "command": "powershell",
+            "args": ["-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}/setup.ps1", "-NoVerify"],
+            "osx":   { "command": "bash", "args": ["${workspaceFolder}/setup.sh", "--no-verify"] },
+            "linux": { "command": "bash", "args": ["${workspaceFolder}/setup.sh", "--no-verify"] },
+            "problemMatcher": [],
+            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+        }
+    ]
+}

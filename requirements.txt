@@ -1,0 +1,6 @@
+# Installed into .venv by setup.ps1. Pinned to the versions verified working
+# on 2026-09-13 (Windows 11, Python 3.12). Bump deliberately, then re-verify
+# with `spike run programs\hello_hub.py`.
+bleak==3.0.2        # Bluetooth Low Energy client - the wireless path (uses Windows WinRT)
+mpremote==1.29.0    # MicroPython REPL tool - the USB path; brings in pyserial
+pyright==1.1.414    # type checker; `.venv\Scripts\python -m pyright programs/` must report 0 errors

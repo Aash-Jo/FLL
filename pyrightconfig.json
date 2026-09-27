@@ -1,0 +1,13 @@
+{
+    // Makes `.venv\Scripts\python -m pyright programs\` work as documented, with
+    // the same view of the project Pylance has inside VS Code: the .venv
+    // packages (bleak, pyserial), the hub API stubs in typings/, and no noise
+    // about stubs that deliberately have no source.
+    "venvPath": ".",
+    "venv": ".venv",
+    "stubPath": "typings",
+    "include": ["programs", "tools", "typings"],
+    "exclude": [".venv", "stubs-unavailable"],
+    "typeCheckingMode": "basic",
+    "reportMissingModuleSource": "none"
+}

@@ -1,0 +1,18 @@
+{
+    // setup.ps1 installs these with `code --install-extension`.
+    "recommendations": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.pylint",
+        // Status-bar buttons (Connect / Run / Stop / Disconnect) - configured in settings.json.
+        "spencerwmiles.vscode-task-buttons"
+    ],
+    // peterstaev.lego-spikeprime-mindstorms-vscode cannot talk to this hub. It
+    // speaks the legacy JSON-RPC protocol (get_hub_info / start_write_program /
+    // program_execute); Hub OS 1.8.149 exposes a plain MicroPython REPL and
+    // simply echoes those messages back as Python dicts. Programs reach the hub
+    // through tools/spike_ble.py (Bluetooth or USB) instead - see tasks.json.
+    "unwantedRecommendations": [
+        "peterstaev.lego-spikeprime-mindstorms-vscode"
+    ]
+}

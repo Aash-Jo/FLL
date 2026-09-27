@@ -1,0 +1,243 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SPIKE Prime Python Cheat Sheet</title>
+<style>
+@page { size: letter; margin: 0.4in; }
+* { box-sizing: border-box; }
+body { font-family: Segoe UI, Arial, sans-serif; font-size: 9.2pt; color: #111; margin: 0; }
+.page { page-break-after: always; display: flex; flex-direction: column; }
+header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 3px solid #1a5fb4; padding-bottom: 3px; margin-bottom: 5px; }
+header h1 { font-size: 14pt; margin: 0; color: #1a5fb4; }
+header span { font-size: 8.5pt; color: #555; }
+.cols { display: flex; gap: 9px; flex: 1; }
+.col { flex: 1; min-width: 0; }
+section { border: 1.5px solid #cfd8e3; border-radius: 6px; padding: 4px 7px 5px; margin-bottom: 6px; break-inside: avoid; }
+h2 { font-size: 10pt; margin: 0 0 3px; color: #fff; background: #1a5fb4; display: inline-block; padding: 1px 7px; border-radius: 4px; }
+h2.green { background: #2e8b57; } h2.orange { background: #d9760a; } h2.purple { background: #7a3fb1; } h2.red { background: #c0392b; }
+pre { font-family: Consolas, "Courier New", monospace; font-size: 8pt; line-height: 1.25; background: #f3f6fa; border-left: 3px solid #1a5fb4; margin: 2px 0 4px; padding: 3px 6px; white-space: pre; overflow: hidden; }
+.r { font-family: Consolas, "Courier New", monospace; font-size: 8pt; background: #fff3e6; border-left: 3px solid #d9760a; margin: 3px 0 0; padding: 2px 6px; white-space: pre; overflow: hidden; }
+.r b, .p { color: #c0392b; font-weight: bold; }
+code { font-family: Consolas, "Courier New", monospace; font-size: 8.2pt; background: #eef2f7; padding: 0 3px; border-radius: 3px; }
+.c { color: #6a737d; } .k { color: #a626a4; } .s { color: #1f7a1f; } .n { color: #b35900; }
+p { margin: 2px 0; }
+ul { margin: 2px 0 2px 14px; padding: 0; } li { margin: 1px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 8.4pt; margin: 3px 0; }
+td, th { border: 1px solid #cfd8e3; padding: 1px 4px; text-align: left; vertical-align: top; }
+th { background: #e8eef6; }
+.tip { background: #fff7d6; border-left: 3px solid #e0a800; padding: 3px 6px; margin: 3px 0; font-size: 8.8pt; }
+.key { background: #fdecea; border: 1.5px solid #c0392b; border-radius: 6px; padding: 4px 7px; margin-bottom: 6px; font-size: 9pt; }
+footer { font-size: 8pt; color: #666; text-align: center; border-top: 1px solid #cfd8e3; padding-top: 3px; margin-top: 3px; }
+</style></head><body>
+
+<!-- ================= PAGE 1 (FRONT) ================= -->
+<div class="page">
+<header><h1>&#129302; SPIKE Prime Python Cheat Sheet</h1><span>BioBuddies FLL Team &nbsp;&bull;&nbsp; Page 1: Program + Driving</span></header>
+
+<div class="key"><b>How to read this sheet:</b> the <span style="background:#fff3e6;padding:0 4px">orange line</span> is the <b>recipe</b>. Words in <span class="p">RED CAPITALS</span> are blanks you fill in with your own numbers. The blue box under it is a finished example you can copy.</div>
+
+<div class="cols">
+<div class="col">
+
+<section><h2>1. Every program looks like this</h2>
+<pre><span class="k">import</span> motor
+<span class="k">import</span> motor_pair
+<span class="k">import</span> runloop
+<span class="k">from</span> hub <span class="k">import</span> port
+
+LEFT = port.A        <span class="c"># left drive motor</span>
+RIGHT = port.E       <span class="c"># right drive motor</span>
+
+<span class="k">async def</span> main():
+    motor_pair.pair(motor_pair.PAIR_1, LEFT, RIGHT)
+    <span class="c"># --- your robot code goes here ---</span>
+
+runloop.run(main())</pre>
+<ul>
+<li><b>Indent with 4 spaces.</b> Everything inside <code>main()</code> is indented.</li>
+<li>Put <b><code>await</code></b> in front of anything that takes time (moving, waiting, beeping). Forget it and the robot will NOT wait for it to finish.</li>
+<li><code># words after a hashtag</code> are notes for humans. The robot skips them.</li>
+<li><code>print("hi")</code> shows text on the computer screen. Great for debugging!</li>
+</ul>
+</section>
+
+<section><h2>2. Our robot's ports</h2>
+<table>
+<tr><th>Port</th><th>What is plugged in</th><th>Write it as</th></tr>
+<tr><td><b>A</b></td><td>Left drive motor (large)</td><td><code>port.A</code></td></tr>
+<tr><td><b>E</b></td><td>Right drive motor (large)</td><td><code>port.E</code></td></tr>
+<tr><td><b>C</b> / <b>D</b></td><td>Attachment motors (medium)</td><td><code>port.C</code> <code>port.D</code></td></tr>
+<tr><td><b>B</b> / <b>F</b></td><td>Color sensors</td><td><code>port.B</code> <code>port.F</code></td></tr>
+</table>
+</section>
+
+<section><h2 class="orange">3. What the blanks mean</h2>
+<table>
+<tr><th style="width:21%">Blank</th><th>What it means</th><th style="width:27%">Good values</th></tr>
+<tr><td><span class="p">PAIR</span></td><td>The two drive wheels together. Always <code>motor_pair.PAIR_1</code></td><td></td></tr>
+<tr><td><span class="p">PORT</span></td><td>Where the motor or sensor is plugged in</td><td><code>port.D</code></td></tr>
+<tr><td><span class="p">DEGREES</span></td><td>How far the wheel turns. 360 = one full wheel turn = about 17.6 cm. <b>1 cm &asymp; 20 degrees</b>. Minus = backwards</td><td>205 = 10 cm<br>410 = 20 cm</td></tr>
+<tr><td><span class="p">STEERING</span></td><td>Which way to go. <b>0 = straight</b>. 100 = spin right. -100 = spin left. 50 = curve right</td><td>0</td></tr>
+<tr><td><span class="p">SPEED</span></td><td>How fast, in degrees per second. Minus = backwards. Max about 1000</td><td>200 slow<br>300 normal<br>600 fast</td></tr>
+<tr><td><span class="p">MS</span></td><td>Time in milliseconds. <b>1000 = 1 second</b></td><td>500 = half sec</td></tr>
+</table>
+</section>
+
+</div>
+<div class="col">
+
+<section><h2 class="green">4. Driving (both wheels)</h2>
+<p>First, tell the robot which two motors are the wheels (once, at the top of <code>main()</code>):</p>
+<pre>motor_pair.pair(motor_pair.PAIR_1, LEFT, RIGHT)</pre>
+
+<p><b>Drive a distance.</b> Straight when STEERING is 0.</p>
+<div class="r">await motor_pair.move_for_degrees(<b>PAIR</b>, <b>DEGREES</b>, <b>STEERING</b>,
+                                  velocity=<b>SPEED</b>)</div>
+<pre><span class="c"># forward 10 cm, straight, normal speed</span>
+<span class="k">await</span> motor_pair.move_for_degrees(
+    motor_pair.PAIR_1, <span class="n">205</span>, <span class="n">0</span>, velocity=<span class="n">300</span>)
+
+<span class="c"># backwards 10 cm  (minus speed = backwards)</span>
+<span class="k">await</span> motor_pair.move_for_degrees(
+    motor_pair.PAIR_1, <span class="n">205</span>, <span class="n">0</span>, velocity=<span class="n">-300</span>)
+
+<span class="c"># spin turn right (100). Use -100 to spin left</span>
+<span class="k">await</span> motor_pair.move_for_degrees(
+    motor_pair.PAIR_1, <span class="n">180</span>, <span class="n">100</span>, velocity=<span class="n">300</span>)</pre>
+
+<p><b>Drive for a time</b> instead of a distance.</p>
+<div class="r">await motor_pair.move_for_time(<b>PAIR</b>, <b>MS</b>, <b>STEERING</b>,
+                               velocity=<b>SPEED</b>)</div>
+<pre><span class="c"># drive straight for 2 seconds</span>
+<span class="k">await</span> motor_pair.move_for_time(
+    motor_pair.PAIR_1, <span class="n">2000</span>, <span class="n">0</span>, velocity=<span class="n">300</span>)</pre>
+
+<p><b>Start driving and keep going</b> until you say stop. No <code>await</code> here!</p>
+<div class="r">motor_pair.move(<b>PAIR</b>, <b>STEERING</b>, velocity=<b>SPEED</b>)
+motor_pair.stop(<b>PAIR</b>)</div>
+<pre>motor_pair.move(motor_pair.PAIR_1, <span class="n">0</span>, velocity=<span class="n">300</span>)
+<span class="k">await</span> runloop.sleep_ms(<span class="n">1000</span>)     <span class="c"># keep going 1 second</span>
+motor_pair.stop(motor_pair.PAIR_1)</pre>
+</section>
+
+<section><h2 class="purple">5. One motor (arms and attachments)</h2>
+<p>Careful: for one motor the speed is just the <b>3rd number</b>, no <code>velocity=</code> word.</p>
+<div class="r">await motor.run_for_degrees(<b>PORT</b>, <b>DEGREES</b>, <b>SPEED</b>)</div>
+<pre>ARM = port.D
+<span class="c"># arm up 90 degrees at speed 300</span>
+<span class="k">await</span> motor.run_for_degrees(ARM, <span class="n">90</span>, <span class="n">300</span>)
+<span class="c"># arm down: minus degrees</span>
+<span class="k">await</span> motor.run_for_degrees(ARM, <span class="n">-90</span>, <span class="n">300</span>)</pre>
+<div class="r">await motor.run_for_time(<b>PORT</b>, <b>MS</b>, <b>SPEED</b>)</div>
+<pre><span class="k">await</span> motor.run_for_time(ARM, <span class="n">1000</span>, <span class="n">300</span>)  <span class="c"># 1 sec</span></pre>
+<div class="r">motor.run(<b>PORT</b>, <b>SPEED</b>)     motor.stop(<b>PORT</b>)</div>
+<pre>motor.run(ARM, <span class="n">300</span>)     <span class="c"># start, keeps going</span>
+<span class="k">await</span> runloop.sleep_ms(<span class="n">500</span>)
+motor.stop(ARM)</pre>
+</section>
+
+</div></div>
+<footer>Robot ON &bull; Bluetooth light BLINKING &bull; SPIKE app CLOSED &bull; then press <b>Ctrl+Shift+B</b> in VS Code to run your program</footer>
+</div>
+
+<!-- ================= PAGE 2 (BACK) ================= -->
+<div class="page">
+<header><h1>&#129302; SPIKE Prime Python Cheat Sheet</h1><span>BioBuddies FLL Team &nbsp;&bull;&nbsp; Page 2: Waiting, Sensors, Lights, Fixing Problems</span></header>
+<div class="cols">
+<div class="col">
+
+<section><h2 class="orange">6. Waiting and repeating</h2>
+<p><b>Wait</b> for some time.</p>
+<div class="r">await runloop.sleep_ms(<b>MS</b>)</div>
+<pre><span class="k">await</span> runloop.sleep_ms(<span class="n">1000</span>)   <span class="c"># wait 1 second</span></pre>
+
+<p><b>Repeat</b> the indented lines a number of times.</p>
+<div class="r">for i in range(<b>TIMES</b>):</div>
+<pre><span class="k">for</span> i <span class="k">in</span> range(<span class="n">4</span>):          <span class="c"># do this 4 times</span>
+    <span class="k">await</span> motor_pair.move_for_degrees(
+        motor_pair.PAIR_1, <span class="n">360</span>, <span class="n">0</span>, velocity=<span class="n">300</span>)
+    <span class="k">await</span> motor_pair.move_for_degrees(
+        motor_pair.PAIR_1, <span class="n">180</span>, <span class="n">100</span>, velocity=<span class="n">300</span>)</pre>
+
+<p><b>Wait until</b> something is true. The timeout stops it waiting forever.</p>
+<div class="r">await runloop.until(lambda: <b>SOMETHING IS TRUE</b>, timeout=<b>MS</b>)</div>
+<pre><span class="c"># wait until the hub's left button is pressed</span>
+<span class="k">from</span> hub <span class="k">import</span> button
+<span class="k">await</span> runloop.until(<span class="k">lambda</span>: button.pressed(button.LEFT))</pre>
+</section>
+
+<section><h2 class="green">7. Color sensor</h2>
+<div class="r">color_sensor.color(<b>PORT</b>)
+   &#8594; which color it sees
+color_sensor.reflection(<b>PORT</b>)
+   &#8594; how bright: 0 (black) to 100 (white)</div>
+<pre><span class="k">import</span> color
+<span class="k">import</span> color_sensor
+EYE = port.B
+
+<span class="c"># decide: is it red?</span>
+<span class="k">if</span> color_sensor.color(EYE) == color.RED:
+    print(<span class="s">"I see red!"</span>)
+<span class="k">else</span>:
+    print(<span class="s">"not red"</span>)
+
+<span class="c"># drive until the sensor sees black, or 5 seconds pass</span>
+motor_pair.move(motor_pair.PAIR_1, <span class="n">0</span>, velocity=<span class="n">200</span>)
+<span class="k">await</span> runloop.until(
+    <span class="k">lambda</span>: color_sensor.color(EYE) == color.BLACK,
+    timeout=<span class="n">5000</span>)
+motor_pair.stop(motor_pair.PAIR_1)</pre>
+<p>Colors you can check for: <code>color.RED</code> <code>color.GREEN</code> <code>color.BLUE</code> <code>color.YELLOW</code> <code>color.BLACK</code> <code>color.WHITE</code></p>
+</section>
+
+</div>
+<div class="col">
+
+<section><h2 class="purple">8. Lights and sounds</h2>
+<div class="r">light_matrix.write(<b>"TEXT"</b>)
+await sound.beep(<b>PITCH</b>, <b>MS</b>)</div>
+<pre><span class="k">from</span> hub <span class="k">import</span> light_matrix, sound
+
+light_matrix.write(<span class="s">"Hi!"</span>)      <span class="c"># scrolls the words</span>
+light_matrix.show_image(light_matrix.IMAGE_HAPPY)
+light_matrix.clear()
+
+<span class="k">await</span> sound.beep(<span class="n">440</span>, <span class="n">300</span>)    <span class="c"># pitch 440, for 300 ms</span></pre>
+<p>PITCH: bigger number = higher note. 262 = C, 330 = E, 392 = G, 523 = high C.</p>
+</section>
+
+<section><h2 class="orange">9. Make your own command</h2>
+<p>Type the drive command once, then use it with centimeters!</p>
+<div class="r">async def <b>NAME</b>(<b>BLANKS</b>):</div>
+<pre><span class="k">async def</span> drive_cm(cm, speed=<span class="n">300</span>):
+    degrees = int(cm * <span class="n">20.5</span>)      <span class="c"># cm to degrees</span>
+    <span class="k">await</span> motor_pair.move_for_degrees(
+        motor_pair.PAIR_1, degrees, <span class="n">0</span>, velocity=speed)
+
+<span class="k">async def</span> main():
+    motor_pair.pair(motor_pair.PAIR_1, LEFT, RIGHT)
+    <span class="k">await</span> drive_cm(<span class="n">30</span>)          <span class="c"># forward 30 cm</span>
+    <span class="k">await</span> drive_cm(<span class="n">-10</span>, <span class="n">200</span>)    <span class="c"># back 10 cm, slower</span></pre>
+</section>
+
+<section><h2 class="red">10. Uh-oh! Fixing problems</h2>
+<table>
+<tr><th>Problem</th><th>Try this</th></tr>
+<tr><td>Drives backwards</td><td>Swap <code>LEFT</code> and <code>RIGHT</code> ports</td></tr>
+<tr><td>Turns the wrong way</td><td>Change STEERING 100 to -100 (or back)</td></tr>
+<tr><td>Goes too far / not far enough</td><td>Change DEGREES. 20 degrees &asymp; 1 cm</td></tr>
+<tr><td>Does everything at once</td><td>You forgot <code>await</code></td></tr>
+<tr><td>"no SPIKE hub found"</td><td>Hub on? Light blinking? SPIKE app closed?</td></tr>
+<tr><td>IndentationError</td><td>Fix the spaces at the line start (use 4)</td></tr>
+<tr><td>SyntaxError</td><td>Missing <code>:</code> <code>)</code> or <code>"</code> on that line or above</td></tr>
+<tr><td>NameError</td><td>Spelling! Or a missing <code>import</code> at the top</td></tr>
+<tr><td>Nothing happens, no error</td><td>Code inside <code>main()</code>? <code>runloop.run(main())</code> at bottom?</td></tr>
+<tr><td>Robot runs away!</td><td>Press the hub's <b>center button</b></td></tr>
+</table>
+</section>
+
+<div class="tip">&#128161; <b>Test small, test often.</b> Change ONE number, run, watch, write down what happened. Robots are honest: they do exactly what the code says!</div>
+
+</div></div>
+<footer>Run: <b>Ctrl+Shift+B</b> (Mac: Cmd+Shift+B) &nbsp;&bull;&nbsp; Stop: hub center button &nbsp;&bull;&nbsp; 1000 ms = 1 second &nbsp;&bull;&nbsp; 360 degrees = 1 wheel turn &asymp; 17.6 cm &nbsp;&bull;&nbsp; 1 cm &asymp; 20 degrees</footer>
+</div>
+
+</body></html>

@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+
+# rebuilt by setup.ps1 on each PC - never copy
+.venv/
+__pycache__/

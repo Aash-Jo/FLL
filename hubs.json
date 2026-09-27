@@ -1,0 +1,22 @@
+{
+  "_readme": [
+    "One entry per robot. `spike discover` prints every hub it can see with the values to paste here.",
+    "ble_address: the hub's Bluetooth address - how `--hub NAME` picks this robot even when both are switched on.",
+    "usb_serial:  the hub's USB serial number - used by `spike usb ... --hub NAME`.",
+    "Without --hub, Bluetooth connects to whichever hub is advertising and USB uses the one hub plugged in."
+  ],
+  "hubs": {
+    "robot1": {
+      "ble_address": "E0:FF:F1:6C:45:B6",
+      "ble_name": "BioBuddies_2",
+      "usb_serial": "335234693132",
+      "notes": "Ports: A/E Large Motors (drive base), C/D Medium Motors, B/F Color Sensors. Hub OS 1.8.149."
+    },
+    "robot2": {
+      "ble_address": null,
+      "ble_name": null,
+      "usb_serial": null,
+      "notes": "NOT YET REGISTERED. Switch on only this robot (Bluetooth light blinking), run `spike discover`, paste its address here; plug it into USB and repeat for the serial."
+    }
+  }
+}

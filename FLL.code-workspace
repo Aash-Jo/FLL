@@ -1,0 +1,47 @@
+{
+    // Double-click this file to open the project in VS Code, on any machine.
+    // It only points at this folder - settings, tasks and extension
+    // recommendations live in .vscode/ so there is one source of truth.
+    "folders": [
+        { "path": "." }
+    ],
+    // One exception. Opening through this file makes VS Code treat the project
+    // as a "workspace", and it then ignores window-level settings in
+    // .vscode/settings.json. The status-bar buttons are one of those, so they
+    // are repeated here. Keep this block identical to the one in
+    // .vscode/settings.json (which applies when the folder is opened directly).
+    "settings": {
+        "VsCodeTaskButtons.showCounter": false,
+        "VsCodeTaskButtons.tasks": [
+            {
+                "label": "$(plug) Connect",
+                "task": "Hub (BLE): session (stay connected)",
+                "tooltip": "Connect to the robot and stay connected (its Bluetooth light must be blinking)"
+            },
+            {
+                "label": "$(play) Run",
+                "task": "Robot: run current file",
+                "tooltip": "Save and run the program that is open in the editor"
+            },
+            {
+                "label": "$(debug-stop) Stop",
+                "task": "Robot: stop",
+                "tooltip": "Stop the program running on the robot"
+            },
+            {
+                "label": "$(debug-disconnect) Disconnect",
+                "task": "Robot: disconnect",
+                "tooltip": "Disconnect from the robot"
+            },
+            {
+                "label": "$(list-selection) Robots",
+                "tooltip": "More: pick a robot, find robots, store a program in a slot",
+                "tasks": [
+                    { "label": "Connect to a chosen robot", "task": "Hub (BLE): session on...", "description": "When both robots are switched on" },
+                    { "label": "Find robots", "task": "Hub (BLE): discover hubs", "description": "Every hub in range, with the values hubs.json needs" },
+                    { "label": "Store current file in a slot", "task": "Hub (BLE): upload current file to a slot", "description": "For the SPIKE app, without running it" }
+                ]
+            }
+        ]
+    }
+}

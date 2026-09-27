@@ -1,0 +1,8 @@
+{
+    // Double-click this file to open the project in VS Code, on any machine.
+    // It only points at this folder - all settings, tasks and extension
+    // recommendations live in .vscode/ so there is one source of truth.
+    "folders": [
+        { "path": "." }
+    ]
+}
